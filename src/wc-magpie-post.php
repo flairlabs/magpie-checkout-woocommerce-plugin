@@ -43,8 +43,7 @@ if(!class_exists('WC_Magpie_Post')){
             $response = wp_remote_get( $url, $args );
             $res_obj = json_decode($response["body"],true);
 
-            $logger = wc_get_logger();
-            $logger->info($response['body'],array( 'source' => 'debug-magpie' ));
+            
             $success = array(
                 'result' 	=> 'success',
                 'redirect'	=> $res_obj["payment_url"]

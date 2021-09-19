@@ -137,7 +137,8 @@ function wc_checkout_magpie_init() {
 					'type'    => 'text',
                     'description' => __( 'URL endpoint if transaction is cancelled', 'wc-checkout-magpie' ),
 					'label'   => __( 'Magpie Checkout calls this URL if the transaction is canceled.', 'wc-checkout-magpie' ),
-					'placeholder' => 'https://example.com/cancelled'
+					'placeholder' => 'https://example.com/cancelled',
+                    'default' => wc_get_checkout_url()
 				),
 
                 'branding_title' => array(
@@ -364,6 +365,10 @@ function wc_checkout_magpie_init() {
             "success_url" => $this->get_return_url( $order )
         );
 
+        
+        // $logger = wc_get_logger();
+        // $logger->info(wc_get_checkout_url(),array( 'source' => 'debug-magpie' ));
+
         $magpie_post = new WC_Magpie_Post();
         return $magpie_post->checkout_session($header,$sessionObj);
     }
@@ -398,9 +403,6 @@ function wc_checkout_magpie_init() {
             //Get the product ID
             $product_id = $item->get_product_id();
         
-            //Get the variation ID
-            $variation_id = $item->get_variation_id();
-        
             //Get the WC_Product object
             $product = $item->get_product();
         
@@ -409,17 +411,6 @@ function wc_checkout_magpie_init() {
         
             // The product name
             $product_name = $item->get_name(); //   OR: $product->get_name();
-        
-            //Get the product SKU (using WC_Product method)
-            $sku = $product->get_sku();
-        
-            // Get line item totals (non discounted)
-            $total     = $item->get_subtotal(); // Total without tax (non discounted)
-            $total_tax = $item->get_subtotal_tax(); // Total tax (non discounted)
-            
-            // Get line item totals (discounted when a coupon is applied)
-            $total     = $item->get_total(); // Total without tax (discounted)
-            $total_tax = $item->get_total_tax(); // Total tax (discounted)
 
             // DOM NOTE: Should we not get the values here from WooCommerce data?
             $image_id  = $product->get_image_id();
