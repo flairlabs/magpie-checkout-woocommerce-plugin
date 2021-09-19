@@ -427,7 +427,7 @@ function wc_checkout_magpie_init() {
 
             $data = array(
                 "name" => $product_name,
-                "description" => "",
+                "description" => $product->get_short_description(),
                 "quantity" => $quantity,
                 "amount" => (int) ((float) $product->get_price() * 100),
                 "currency"=> "php",
