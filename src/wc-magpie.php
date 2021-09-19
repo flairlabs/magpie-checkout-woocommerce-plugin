@@ -81,6 +81,10 @@ function wc_checkout_magpie_init() {
 			$this->init_form_fields();
 			$this->init_settings();
 
+            $this->title        = $this->get_option( 'title' );
+			$this->description  = $this->get_option( 'description' );
+			$this->instructions = $this->get_option( 'instructions', $this->description );
+
 			// Actions
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 			add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
@@ -418,13 +422,16 @@ function wc_checkout_magpie_init() {
             $total_tax = $item->get_total_tax(); // Total tax (discounted)
 
             // DOM NOTE: Should we not get the values here from WooCommerce data?
+            $image_id  = $product->get_image_id();
+            $image_url = wp_get_attachment_image_url( $image_id, 'full' );
+
             $data = array(
                 "name" => $product_name,
                 "description" => "",
                 "quantity" => $quantity,
                 "amount" => (float) $product->get_price() * 100,
                 "currency"=> "php",
-                "image"=> "https://i.pinimg.com/originals/62/98/b0/6298b026a65cf80bcf9dce061e9b79c9.png"
+                 "image"=> $image_url
             );
 
             array_push($data_items,$data);
