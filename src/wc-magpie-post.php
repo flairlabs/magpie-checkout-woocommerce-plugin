@@ -19,11 +19,18 @@ if(!class_exists('WC_Magpie_Post')){
             );
 
             $response = wp_remote_request( "https://pay.magpie.im/api/v2/sessions", $args );
-            $res_obj = json_decode($response["body"],true);
-            
-            $url = "https://pay.magpie.im/api/v2/sessions/".$res_obj['id'];
+            if(!is_wp_error($response)){
 
-            return $this->get_payment_url($url,$header);
+                $res_obj = json_decode($response["body"],true);
+            
+                $url = "https://pay.magpie.im/api/v2/sessions/".$res_obj['id'];
+    
+                return $this->get_payment_url($url,$header);
+
+            }else{
+                $logger = wc_get_logger();
+                $logger->info($response->get_error_message(),array( 'source' => 'debug-magpie' ));
+            }
             
         }
 
@@ -41,15 +48,20 @@ if(!class_exists('WC_Magpie_Post')){
             );
 
             $response = wp_remote_get( $url, $args );
-            $res_obj = json_decode($response["body"],true);
+            if(!is_wp_error($response)){
+                $res_obj = json_decode($response["body"],true);
 
-            
-            $success = array(
-                'result' 	=> 'success',
-                'redirect'	=> $res_obj["payment_url"]
-            );
+                
+                $success = array(
+                    'result' 	=> 'success',
+                    'redirect'	=> $res_obj["payment_url"]
+                );
 
-            return $success;
+                return $success;
+            }else{
+                $logger = wc_get_logger();
+                $logger->info($response->get_error_message(),array( 'source' => 'debug-magpie' ));
+            }
         }
     }
 }
