@@ -5,7 +5,7 @@ Donate link: https://magpie.im/
 Tags: comments, spam, cache 
 Requires at least: 4.0 
 Tested up to: 5.8
-Stable tag: 1.0.0 
+Stable tag: 1.0.1 
 Requires PHP: 5.4 
 License: GPLv2 or later 
 License URI: https://www.gnu.org/licenses/gpl-2.0.html 
@@ -39,8 +39,14 @@ This plugin will handle transactions using the Magpie payment gateway(checkout) 
 
 == Changelog ==
 
-09/12/2021 - initial upload
+= 1.0.1 =
+
+* Added Customer creation for Magpie Dashboard
+* Added settings for banks, cards, wallets
+
+= 1.0 =
+
+* Initial Upload
 
 
 == Upgrade Notice ==
--

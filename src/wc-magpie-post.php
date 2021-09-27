@@ -1,8 +1,8 @@
 <?php
 
-if(!class_exists('WC_Magpie_Post')){
+if(!class_exists('Magpie_Post')){
 
-    class WC_Magpie_Post {
+    class Magpie_Post {
 
         public function checkout_session($header,$sessionObj){
 
@@ -63,7 +63,38 @@ if(!class_exists('WC_Magpie_Post')){
                 $logger->info($response->get_error_message(),array( 'source' => 'debug-magpie' ));
             }
         }
+
+        function create_customer($header,$customerObj){
+
+            $args = array(
+                'headers' => array(
+                    "Authorization" => "Basic " . $header,
+                    "Content-Type" => "application/json",
+                    "Accept" => "application/json",
+                ),
+                'body'        => json_encode($customerObj),
+                'method'      => 'POST',
+                'data_format' => 'body',
+                'httpversion' => '1.1',
+            );
+
+            $response = wp_remote_request( "https://api.magpie.im/v2/customers/", $args );
+
+
+            if(!is_wp_error($response)){
+                $res_obj = json_decode($response["body"],true);
+                return $res_obj['id'];
+            
+            }else{
+                $logger = wc_get_logger();
+                $logger->info($response->get_error_message(),array( 'source' => 'debug-magpie' ));
+            }
+
+            
+        }
     }
-}
+
+    }
+
 
 ?>
