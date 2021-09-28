@@ -3,7 +3,7 @@
 * Plugin Name: Magpie Payment for WooCommerce
 * Plugin URI: https://magpie.im
 * Description: Pay using Visa, MasterCard, JCB, PayMaya, GCash and online banking.
-* Version: 1.0.0
+* Version: 1.0.1
 * Author: Magpie.IM Inc.
 * Author URI: https://github.com/flairlabs
 * License: GPL2
@@ -287,16 +287,6 @@ function magpie_checkout_init() {
             //    )
 
             ) );
-        }
-    
-    
-        /**
-         * Output for the order received page.
-         */
-        public function thankyou_page() {
-            if ( $this->instructions ) {
-                echo wpautop( wptexturize( $this->instructions ) );
-            }
         }
     
         /**
