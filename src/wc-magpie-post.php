@@ -18,7 +18,13 @@ if(!class_exists('Magpie_Post')){
                 'httpversion' => '1.1',
             );
 
+            $logger = wc_get_logger();
+            $logger->info(json_encode($args),array( 'source' => 'payload-checkout-magpie' ));
+
             $response = wp_remote_request( "https://pay.magpie.im/api/v2/sessions", $args );
+
+            $logger->info(json_encode($response),array( 'source' => 'response-checkout-magpie' ));
+
             if(!is_wp_error($response)){
 
                 $res_obj = json_decode($response["body"],true);
@@ -47,9 +53,16 @@ if(!class_exists('Magpie_Post')){
                 'httpversion' => '1.1',
             );
 
+            $logger = wc_get_logger();
+            $logger->info(json_encode($args),array( 'source' => 'payload-payment-magpie' ));
+
             $response = wp_remote_get( $url, $args );
+
+            $logger->info(json_encode($response),array( 'source' => 'response-payment-magpie' ));
+
             if(!is_wp_error($response)){
                 $res_obj = json_decode($response["body"],true);
+
 
                 
                 $success = array(
@@ -78,8 +91,12 @@ if(!class_exists('Magpie_Post')){
                 'httpversion' => '1.1',
             );
 
+            $logger = wc_get_logger();
+            $logger->info(json_encode($args),array( 'source' => 'payload-customer-magpie' ));
+
             $response = wp_remote_request( "https://api.magpie.im/v2/customers/", $args );
 
+            $logger->info(json_encode($response),array( 'source' => 'response-customer-magpie' ));
 
             if(!is_wp_error($response)){
                 $res_obj = json_decode($response["body"],true);

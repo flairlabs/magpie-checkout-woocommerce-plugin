@@ -194,30 +194,31 @@ function magpie_checkout_init() {
                     'label' => ' ',
                     'default' => 'yes'
                 ),
-                'bdo_toggle' => array(
-                    'title'   => __( 'BDO', 'wc-checkout-magpie' ),
-                    'type'    => 'checkbox',
-                    'label' => ' ',
-                    'default' => 'yes'
-                ),
-                'metro_toggle' => array(
-                    'title'   => __( 'Metrobank', 'wc-checkout-magpie' ),
-                    'type'    => 'checkbox',
-                    'label' => ' ',
-                    'default' => 'yes'
-                ),
-                'pnb_toggle' => array(
-                    'title'   => __( 'Philippine National Bank', 'wc-checkout-magpie' ),
-                    'type'    => 'checkbox',
-                    'label' => ' ',
-                    'default' => 'yes'
-                ),
-                'rcbc_toggle' => array(
-                    'title'   => __( 'RCBC', 'wc-checkout-magpie' ),
-                    'type'    => 'checkbox',
-                    'label' => ' ',
-                    'default' => 'yes'
-                ),
+                //disable not yet available
+                // 'bdo_toggle' => array(
+                //     'title'   => __( 'BDO', 'wc-checkout-magpie' ),
+                //     'type'    => 'checkbox',
+                //     'label' => ' ',
+                //     'default' => 'yes'
+                // ),
+                // 'metro_toggle' => array(
+                //     'title'   => __( 'Metrobank', 'wc-checkout-magpie' ),
+                //     'type'    => 'checkbox',
+                //     'label' => ' ',
+                //     'default' => 'yes'
+                // ),
+                // 'pnb_toggle' => array(
+                //     'title'   => __( 'Philippine National Bank', 'wc-checkout-magpie' ),
+                //     'type'    => 'checkbox',
+                //     'label' => ' ',
+                //     'default' => 'yes'
+                // ),
+                // 'rcbc_toggle' => array(
+                //     'title'   => __( 'RCBC', 'wc-checkout-magpie' ),
+                //     'type'    => 'checkbox',
+                //     'label' => ' ',
+                //     'default' => 'yes'
+                // ),
 
                 'ub_toggle' => array(
                     'title'   => __( 'UnionBank', 'wc-checkout-magpie' ),
@@ -273,6 +274,19 @@ function magpie_checkout_init() {
                     'type'    => 'checkbox',
                     'label' => ' ',
                     'default' => 'yes'
+                ),
+
+                
+
+                'mode_toggle'   => array(
+                    'title'       => __( 'Payment Mode', 'wc-checkout-magpie' ),
+                    'type'        => 'select',
+                    'description' => __( 'For more information, check out <strong>authorize</strong> and <strong>capture</strong> <a href="https://www.360payments.com/capture-vs-authorization-heres-what-you-need-to-know/">here</a> and <a href="https://www.godaddy.com/garage/authorize-vs-authorize-and-capture/">here</a>', 'wc-checkout-magpie' ),
+                    'options'     => array(
+                        'payment' => 'Purchase - authorize and capture in one go',
+                        'setup'  => 'Authorize only - you need to capture separately'
+                    ),
+                    'default' => 'payment'
                 ),
 
             //     'billing_details' => array(
@@ -353,6 +367,10 @@ function magpie_checkout_init() {
 
         $paymethod_array = $this->get_payment_methods();
 
+        if($this->get_option('mode_toggle') == "setup"){
+            $paymethod_array = array("card");
+        }
+
         if($this->get_option('icon_logo_toggle') == "yes"){
         $use_logo = true;
         }
@@ -377,7 +395,8 @@ function magpie_checkout_init() {
             "payment_method_types" => $paymethod_array,
             "shipping_address_collection"=>null,
             "submit_type" => "pay",
-            "success_url" => $this->get_return_url( $order )
+            "success_url" => $this->get_return_url( $order ),
+            "mode" => $this->get_option('mode_toggle'),
         );
 
         return $magpie_post->checkout_session($header,$sessionObj);
@@ -390,15 +409,20 @@ function magpie_checkout_init() {
         if($this->get_option('bpi_toggle') == "yes"){
             array_push($array,"bpi");
         }
-        if($this->get_option('bdo_toggle') == "yes"){array_push($array,"bdo");}
-        if($this->get_option('metro_toggle') == "yes"){array_push($array,"metrobank");}
-        if($this->get_option('pnb_toggle') == "yes"){array_push($array,"pnb");}
-        if($this->get_option('rcbc_toggle') == "yes"){array_push($array,"rcbc");}
+
+        // if($this->get_option('bdo_toggle') == "yes"){array_push($array,"bdo");}
+        // if($this->get_option('metro_toggle') == "yes"){array_push($array,"metrobank");}
+        // if($this->get_option('pnb_toggle') == "yes"){array_push($array,"pnb");}
+        // if($this->get_option('rcbc_toggle') == "yes"){array_push($array,"rcbc");}
+
         if($this->get_option('ub_toggle') == "yes"){array_push($array,"unionbank");}
+
         if($this->get_option('gcash_toggle') == "yes"){array_push($array,"gcash");}
         if($this->get_option('paymaya_toggle') == "yes"){array_push($array,"paymaya");}
-        if($this->get_option('grab_toggle') == "yes"){array_push($array,"grab");}
-        if($this->get_option('coins_toggle') == "yes"){array_push($array,"coins");}
+
+        // if($this->get_option('grab_toggle') == "yes"){array_push($array,"grab");}
+        // if($this->get_option('coins_toggle') == "yes"){array_push($array,"coins");}
+
         if($this->get_option('ali_toggle') == "yes"){array_push($array,"alipay");}
         if($this->get_option('union_toggle') == "yes"){array_push($array,"unionpay");}
         if($this->get_option('wechat_toggle') == "yes"){array_push($array,"wechat");}
